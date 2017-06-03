@@ -6,4 +6,7 @@ gem "dotenv"
 
 group :development do
   gem "capistrano"
+  gem 'capistrano-rbenv'
+  gem 'capistrano-bundler'
+  gem 'capistrano-passenger'
 end
