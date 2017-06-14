@@ -70,7 +70,18 @@ class ConoHaDDNS
   end
 end
 
-use Rack::Auth::Basic do |user, pass|
+class MyAuth < Rack::Auth::Basic
+  def call(env)
+    request = Rack::Request.new(env)
+    if request.path == '/check'
+      remote_addr = env['X_REAL_IP'] || env['REMOTE_ADDR']
+      return [200, {'Content-Type' => 'text/plain'}, [remote_addr]]
+    end
+    super
+  end
+end
+
+use MyAuth do |user, pass|
   user == ENV['DDNS_USER'] && pass == ENV['DDNS_PASS']
 end
 
